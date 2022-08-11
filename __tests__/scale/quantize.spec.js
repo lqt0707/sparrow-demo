@@ -13,5 +13,6 @@ describe("createQuantize", () => {
     expect(s(0.6)).toBe("b");
     expect(s(0.8)).toBe("c");
     expect(s(1)).toBe("c");
+    
   });
 });
