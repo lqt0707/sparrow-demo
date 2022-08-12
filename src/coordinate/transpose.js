@@ -1,4 +1,4 @@
-import { reflectX, translate, transpose } from "./transforms";
+import { reflectX, translate, transpose as transposeT } from "./transforms";
 import { curry } from "./utils";
 
 function coordinate(transformOptions, canvasOptions) {

@@ -1,3 +1,5 @@
+import { compose } from "./utils";
+
 export function createCoordinate({
   x,
   y,
@@ -11,14 +13,16 @@ export function createCoordinate({
   // 它们返回一个由基本变换构成的数组，所以在复合前需要通过 flat 把数组拍平
   // [[transpose, reflect], [transpose, reflect]]
   // -> [transpose, reflect, transpose, reflect]
-  const transforms = coordinates.map((coordinate) =>
-    coordinate({
-      x,
-      y,
-      width,
-      height, // 传入 canvasOptions
-    })
-  ).flat; // 传入 canvasOptions
+  const transforms = coordinates
+    .map((coordinate) =>
+      coordinate({
+        x,
+        y,
+        width,
+        height, // 传入 canvasOptions
+      })
+    )
+    .flat(); // 传入 canvasOptions
 
   const output = compose(...transforms); // 复合
 
@@ -26,7 +30,7 @@ export function createCoordinate({
   const types = transforms.map((d) => d.type());
 
   // 判断是否是极坐标系
-  output.isPolar = () => types.indexOf("polar");
+  output.isPolar = () => types.indexOf("polar") !== -1;
 
   // 判断是否转置
   // 只有是奇数个 'transpose' 的时候才是转置
