@@ -1,9 +1,9 @@
 // 创建SVG元素
 export function createSVGElement(type) {
-  return document.createElementNS("http://www.w3.org/2000/svg", type);
+  return document.createElementNS('http://www.w3.org/2000/svg', type);
 }
 
-//将child节点挂载到parent节点上面
+// 将child节点挂载到parent节点上面
 export function mount(parent, child) {
   if (parent) {
     parent.appendChild(child);
@@ -18,15 +18,15 @@ export function applyAttributes(element, attributes) {
     // https://juejin.cn/post/6844903487155732494
     const kebabCaseKey = key.replace(
       /[A-Z]/g,
-      (d) => `-${d.toLocaleLowerCase()}`
+      (d) => `-${d.toLocaleLowerCase()}`,
     );
     element.setAttribute(kebabCaseKey, value);
   }
 }
 
 export function applyTransform(element, transform) {
-  const oldTransform = element.getAttribute("transform") || "";
-  //使新的变换制定到后面的变换后，这里需要字符串拼接
-  const prefix = oldTransform ? `${oldTransform} ` : "";
-  element.setAttribute("transform", `${prefix}${transform}`);
+  const oldTransform = element.getAttribute('transform') || '';
+  // 使新的变换制定到后面的变换后，这里需要字符串拼接
+  const prefix = oldTransform ? `${oldTransform} ` : '';
+  element.setAttribute('transform', `${prefix}${transform}`);
 }

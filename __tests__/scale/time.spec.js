@@ -1,7 +1,7 @@
-import { createTime } from "../../src/scale";
+import { createTime } from '../../src/scale';
 
-describe("createTime", () => {
-  test("createTime(options) returns scale map Date linearly.", () => {
+describe('createTime', () => {
+  test('createTime(options) returns scale map Date linearly.', () => {
     const s = createTime({
       domain: [new Date(2000, 0, 1), new Date(2000, 0, 2)],
       range: [0, 960],

@@ -1,5 +1,5 @@
-import { createRenderer } from "../../src/renderer/renderer";
-import { createDiv, mount } from "../utils";
+import { createRenderer } from '../../src/renderer/renderer';
+import { createDiv, mount } from '../utils';
 
 describe('transform', () => {
   test('Renderer should apply specified transforms and can save or restore transforms context.', () => {
@@ -16,7 +16,7 @@ describe('transform', () => {
       width: 50,
       height: 50,
     });
-    
+
     renderer.restore();
 
     const r2 = renderer.rect({

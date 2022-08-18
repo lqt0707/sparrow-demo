@@ -1,7 +1,7 @@
-import { createQuantile } from "../../src/scale";
+import { createQuantile } from '../../src/scale';
 
-describe("createQuantile", () => {
-  test("createQuantile(options) finds right interval based on rank and returns corresponding value in range.", () => {
+describe('createQuantile', () => {
+  test('createQuantile(options) finds right interval based on rank and returns corresponding value in range.', () => {
     const s = createQuantile({
       domain: [3, 6, 7, 8, 8, 10, 13, 15, 16, 20],
       range: ['a', 'b', 'c', 'd'],

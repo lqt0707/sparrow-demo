@@ -1,6 +1,7 @@
-import { createCoordinate, cartesian } from "../../src/coordinate";
-describe("cartesian", () => {
-  test("cartesian", () => {
+import { createCoordinate, cartesian } from '../../src/coordinate';
+
+describe('cartesian', () => {
+  test('cartesian', () => {
     const c = createCoordinate({
       width: 200,
       height: 300,

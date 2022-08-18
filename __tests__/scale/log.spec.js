@@ -1,5 +1,5 @@
-import { TestScheduler } from "jest";
-import { createLog } from "../../src/scale/log";
+import { TestScheduler } from 'jest';
+import { createLog } from '../../src/scale/log';
 
 function nice(domain, niceDomain, base) {
   const scale = createLog({
@@ -18,8 +18,8 @@ function ticks(domain, base, tickCount) {
   return scale.ticks(tickCount);
 }
 
-describe("createLog", () => {
-  test("createLog(options) returns log function and only accept x>0.", () => {
+describe('createLog', () => {
+  test('createLog(options) returns log function and only accept x>0.', () => {
     const s = createLog({
       domain: [1, 10],
       range: [0, 1],
@@ -30,14 +30,14 @@ describe("createLog", () => {
     expect(s(5)).toBeCloseTo(0.699, 3);
   });
 
-  test("scale.nice(base) extends domain for better ticks.", () => {
+  test('scale.nice(base) extends domain for better ticks.', () => {
     expect(nice([10, 50], [8, 64], 2)).toBeTruthy();
     expect(nice([10, 50], [9, 81], 3)).toBeTruthy();
     expect(nice([10, 50], [4, 64], 4)).toBeTruthy();
     expect(nice([10, 50], [5, 125], 5)).toBeTruthy();
   });
 
-  test("scale.ticks(tickCount) returns ticks in base ^ n format.", () => {
+  test('scale.ticks(tickCount) returns ticks in base ^ n format.', () => {
     expect(ticks([10, 100], 2, 5)).toEqual([8, 16, 32, 64, 128]);
     expect(ticks([1, 1e5], 10, 5)).toEqual([1, 10, 100, 1000, 10000, 100000]);
   });

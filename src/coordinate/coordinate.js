@@ -1,4 +1,4 @@
-import { compose } from "./utils";
+import { compose } from './utils';
 
 export function createCoordinate({
   x,
@@ -14,14 +14,12 @@ export function createCoordinate({
   // [[transpose, reflect], [transpose, reflect]]
   // -> [transpose, reflect, transpose, reflect]
   const transforms = coordinates
-    .map((coordinate) =>
-      coordinate({
-        x,
-        y,
-        width,
-        height, // 传入 canvasOptions
-      })
-    )
+    .map((coordinate) => coordinate({
+      x,
+      y,
+      width,
+      height, // 传入 canvasOptions
+    }))
     .flat(); // 传入 canvasOptions
 
   const output = compose(...transforms); // 复合
@@ -30,13 +28,12 @@ export function createCoordinate({
   const types = transforms.map((d) => d.type());
 
   // 判断是否是极坐标系
-  output.isPolar = () => types.indexOf("polar") !== -1;
+  output.isPolar = () => types.indexOf('polar') !== -1;
 
   // 判断是否转置
   // 只有是奇数个 'transpose' 的时候才是转置
   // 这里使用了异或：a ^ b， 只有当 a 和 b 值不相同的时候才为 true，否者为 false
-  output.isTranspose = () =>
-    types.reduce((is, type) => is ^ (type === "transpose"), false);
+  output.isTranspose = () => types.reduce((is, type) => is ^ (type === 'transpose'), false);
 
   // 获得坐标系画布的中心
   output.center = () => [x + width / 2, y + height / 2];

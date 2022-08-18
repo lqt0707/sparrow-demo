@@ -1,6 +1,10 @@
-import { createContext } from "./context";
-import { line, circle, text, rect, path, ring } from "./shape";
-import { restore, rotate, save, scale, translate } from "./transform";
+import { createContext } from './context';
+import {
+  line, circle, text, rect, path, ring,
+} from './shape';
+import {
+  restore, rotate, save, scale, translate,
+} from './transform';
 
 export function createRenderer(width, height) {
   const context = createContext(width, height);

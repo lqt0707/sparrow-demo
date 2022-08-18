@@ -1,16 +1,16 @@
-import { applyAttributes, createSVGElement, mount } from "./utils";
+import { applyAttributes, createSVGElement, mount } from './utils';
 
 export function shape(type, context, attributes) {
-  const { group } = context; //挂载元素
-  const el = createSVGElement(type); //创建对应的元素
-  applyAttributes(el, attributes); //设置属性
+  const { group } = context; // 挂载元素
+  const el = createSVGElement(type); // 创建对应的元素
+  applyAttributes(el, attributes); // 设置属性
 
-  mount(group, el); //挂载
+  mount(group, el); // 挂载
   return el; // 返回该元素
 }
 
 export function line(context, attributes) {
-  return shape("line", context, attributes);
+  return shape('line', context, attributes);
 }
 
 // rect 不支持 width 和 height 是负数，下面这种情况将绘制不出来
@@ -18,9 +18,11 @@ export function line(context, attributes) {
 // 为了使其支持负数的 width 和 height，我们转换成如下的形式
 // <rect width="60" height="60" x="40" y="40" /> ✅
 export function rect(context, attributes) {
-  const { width, height, x, y } = attributes;
+  const {
+    width, height, x, y,
+  } = attributes;
 
-  return shape("rect", context, {
+  return shape('rect', context, {
     ...attributes,
     width: Math.abs(width),
     height: Math.abs(height),
@@ -30,7 +32,7 @@ export function rect(context, attributes) {
 }
 
 export function circle(context, attributes) {
-  return shape("circle", context, attributes);
+  return shape('circle', context, attributes);
 }
 
 // text 元素是将展示内容放在标签内部，而不是作为标签的属性
@@ -38,7 +40,7 @@ export function circle(context, attributes) {
 // <text>content</text> ✅
 export function text(context, attributes) {
   const { text, ...rest } = attributes;
-  const textElement = shape("text", context, rest);
+  const textElement = shape('text', context, rest);
   textElement.textContent = text; // 通过 textContent 设置标签内的内容
   return textElement;
 }
@@ -56,16 +58,19 @@ export function text(context, attributes) {
 // 'M 10 10 L 100 100 L 100 10 Z'
 export function path(context, attributes) {
   const { d } = attributes;
-  return shape("path", context, { ...attributes, d: d.flat().join(" ") });
+  const path = Array.isArray(d) ? d.flat().join(' ') : d;
+  return shape('path', context, { ...attributes, d: path });
 }
 
 export function ring(context, attributes) {
   // r1 是内圆的半径，r2是外圆的半径
-  const { cx, cy, r1, r2, ...styles } = attributes;
+  const {
+    cx, cy, r1, r2, ...styles
+  } = attributes;
   const { stroke, strokeWidth, fill } = styles;
   const defaultStrokeWidth = 1;
   const innderStroke = circle(context, {
-    fill: "transparent",
+    fill: 'transparent',
     stroke: stroke || fill,
     strokeWidth,
     cx,
@@ -76,13 +81,13 @@ export function ring(context, attributes) {
     ...styles,
     strokeWidth: r2 - r1 - (strokeWidth || defaultStrokeWidth),
     stroke: fill,
-    fill: "transparent",
+    fill: 'transparent',
     cx,
     cy,
     r: (r1 + r2) / 2,
   });
   const outerStroke = circle(context, {
-    fill: "transparent",
+    fill: 'transparent',
     stroke: stroke || fill,
     strokeWidth,
     cx,
