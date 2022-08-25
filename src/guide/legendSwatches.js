@@ -1,13 +1,29 @@
 // marginLeft 色块和文字的距离
+import { identity } from '../coordinate/utils';
+
 export function legendSwatches(renderer, scale, coordinate, {
-  x, y, width = 48, marginLeft = 12, swatchSize = 10, fontSize = 10, formatter = identity, domain, label,
+  x,
+  y,
+  width = 48,
+  marginLeft = 12,
+  swatchSize = 10,
+  fontSize = 10,
+  formatter = identity,
+  domain,
+  label,
 }) {
   renderer.save();
   renderer.translate(x, y);
   // 绘制 label
   if (label) {
     renderer.text({
-      text: label, x: 0, y: 0, fontWeight: 'bold', fontSize, textAnchor: 'start', dy: '1em',
+      text: label,
+      x: 0,
+      y: 0,
+      fontWeight: 'bold',
+      fontSize,
+      textAnchor: 'start',
+      dy: '1em',
     });
   }
 
@@ -29,7 +45,11 @@ export function legendSwatches(renderer, scale, coordinate, {
     const textX = legenX + marginLeft + swatchSize;
     const textY = legendY + swatchSize;
     renderer.text({
-      text: formatter(label), x: textX, y: textY, fill: 'currentColor', fontSize,
+      text: formatter(label),
+      x: textX,
+      y: textY,
+      fill: 'currentColor',
+      fontSize,
     });
   }
   renderer.restore();

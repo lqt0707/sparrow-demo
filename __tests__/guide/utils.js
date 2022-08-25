@@ -3,7 +3,10 @@ import { createRenderer } from '../../src/renderer/renderer';
 import { createDiv, mount } from '../utils';
 
 export function renderAxis({
-  scale, transforms, axis, ...options
+  scale,
+  transforms,
+  axis,
+  ...options
 }) {
   const coordinate = createCoordinate({
     x: 30,
@@ -22,16 +25,23 @@ export function firstOf(svg, className) {
   const [node] = svg.getElementsByClassName(className);
   return {
     toBeNull() {
-      expect(node).toBeUndefined();
+      expect(node)
+        .toBeUndefined();
     },
-    toEqual({ textContent, ...attributes }) {
-      const renderedAttributes = Object.keys(attributes).reduce((obj, key) => {
-        obj[key] = node.getAttribute(key);
-        return obj;
-      }, {});
-      expect(renderedAttributes).toEqual(attributes);
+    toEqual({
+      textContent,
+      ...attributes
+    }) {
+      const renderedAttributes = Object.keys(attributes)
+        .reduce((obj, key) => {
+          obj[key] = node.getAttribute(key);
+          return obj;
+        }, {});
+      expect(renderedAttributes)
+        .toEqual(attributes);
       if (textContent) {
-        expect(textContent).toBe(node.textContent);
+        expect(textContent)
+          .toBe(node.textContent);
       }
     },
   };

@@ -1,13 +1,19 @@
-import { createLinear } from '../../src/scale';
-import { firstOf, renderAxis } from './utils';
-import { cartesian, polar, transpose } from '../../src/coordinate';
-import { axisX } from '../../src/guide/axisX';
-
-describe('axisX', () => {
+const {
+  firstOf,
+  renderAxis
+} = require('./utils');
+const {
+  cartesian,
+  transpose,
+  polar
+} = require('../../src/coordinate');
+const { axisY } = require('../../src/guide/axisY');
+const { createLinear } = require('../../src/scale');
+describe('axisY', () => {
   const domain = [0, 10];
   const scale = createLinear({
     domain,
-    range: [0, 1],
+    range: [1, 0],
   });
 
   test('cartesian', () => {
@@ -15,43 +21,7 @@ describe('axisX', () => {
       scale,
       domain,
       transforms: [cartesian()],
-      axis: axisX,
-      label: 'val',
-      grid: true,
-    });
-
-    firstOf(svg, 'tick')
-      .toEqual({
-        x1: '30',
-        x2: '30',
-        y1: '370',
-        y2: '375',
-        stroke: 'currentColor',
-      });
-
-    firstOf(svg, 'text')
-      .toEqual({
-        'text-anchor': 'middle',
-        x: '30',
-        y: '375',
-        dy: '1em',
-        textContent: '0',
-      });
-
-    firstOf(svg, 'label')
-      .toEqual({
-        textContent: 'val →',
-        x: '570',
-        y: '375',
-      });
-  });
-
-  test('transpose', () => {
-    const svg = renderAxis({
-      scale,
-      domain,
-      transforms: [transpose(), cartesian()],
-      axis: axisX,
+      axis: axisY,
       label: 'val',
       grid: true,
     });
@@ -60,8 +30,8 @@ describe('axisX', () => {
       .toEqual({
         x1: '30',
         x2: '25',
-        y1: '30',
-        y2: '30',
+        y1: '370',
+        y2: '370',
         stroke: 'currentColor',
       });
 
@@ -69,16 +39,52 @@ describe('axisX', () => {
       .toEqual({
         'text-anchor': 'end',
         x: '30',
-        y: '30',
+        y: '370',
         dy: '0.5em',
         textContent: '0',
       });
 
     firstOf(svg, 'label')
       .toEqual({
-        textContent: '↓ val',
+        textContent: '↑ val',
         x: '30',
-        y: '370',
+        y: '30',
+      });
+  });
+
+  test('transpose', () => {
+    const svg = renderAxis({
+      scale,
+      domain,
+      transforms: [transpose(), cartesian()],
+      axis: axisY,
+      label: 'val',
+      grid: true,
+    });
+
+    firstOf(svg, 'tick')
+      .toEqual({
+        x1: '30',
+        x2: '30',
+        y1: '30',
+        y2: '25',
+        stroke: 'currentColor',
+      });
+
+    firstOf(svg, 'text')
+      .toEqual({
+        'text-anchor': 'middle',
+        x: '30',
+        y: '25',
+        dy: '-0.3em',
+        textContent: '0',
+      });
+
+    firstOf(svg, 'label')
+      .toEqual({
+        textContent: 'val →',
+        x: '570',
+        y: '25',
       });
   });
 
@@ -86,7 +92,7 @@ describe('axisX', () => {
     const svg = renderAxis({
       scale,
       domain,
-      axis: axisX,
+      axis: axisY,
       transforms: [
         polar({
           startAngle: -Math.PI / 2,
@@ -97,7 +103,45 @@ describe('axisX', () => {
         cartesian()],
       grid: true,
     });
-    console.log(svg);
+
+    firstOf(svg, 'tick')
+      .toEqual({
+        x1: '300',
+        x2: '295',
+        y1: '200',
+        y2: '200',
+        stroke: 'currentColor',
+      });
+
+    firstOf(svg, 'text')
+      .toEqual({
+        'text-anchor': 'end',
+        x: '300',
+        y: '200',
+        dy: '0.5em',
+        textContent: '0',
+      });
+
+    firstOf(svg, 'label')
+      .toBeNull();
+  });
+
+  test('polar and transpose', () => {
+    const svg = renderAxis({
+      scale,
+      domain,
+      axis: axisY,
+      transforms: [
+        transpose(),
+        polar({
+          startAngle: -Math.PI / 2,
+          endAngle: (Math.PI / 2) * 3,
+          innerRadius: 0,
+          outerRadius: 1,
+        }),
+        cartesian()],
+      grid: true,
+    });
 
     firstOf(svg, 'tick')
       .toEqual({
@@ -114,53 +158,10 @@ describe('axisX', () => {
         x: '0',
         y: '0',
         dy: '-0.5em',
+        textContent: '0',
       });
 
     firstOf(svg, 'label')
       .toBeNull();
   });
-
-  test('polar and transpose', () => {
-    const domain = [0, 10];
-    const scale = createLinear({
-      domain,
-      range: [0, 1],
-    });
-    const svg = renderAxis({
-      scale,
-      domain,
-      axis: axisX,
-      transforms: [
-        transpose(),
-        polar({
-          startAngle: -Math.PI / 2,
-          endAngle: (Math.PI / 2) * 3,
-          innerRadius: 0,
-          outerRadius: 1,
-        }),
-        cartesian()],
-      grid: true,
-    });
-
-    firstOf(svg, 'tick')
-      .toEqual({
-        x1: '300',
-        x2: '295',
-        y1: '30',
-        y2: '30',
-        stroke: 'currentColor',
-      });
-
-    firstOf(svg, 'text')
-      .toEqual({
-        'text-anchor': 'end',
-        x: '300',
-        y: '30',
-        dy: '0.5em',
-      });
-
-    firstOf(svg, 'label')
-      .toBeNull();
-  });
-
 });
