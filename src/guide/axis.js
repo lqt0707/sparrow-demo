@@ -1,6 +1,6 @@
 import { re } from '@babel/core/lib/vendor/import-meta-resolve';
 import { identity } from '../coordinate/utils';
-import {lastOf} from "./utils";
+import { lastOf } from './utils';
 
 // components 不同坐标系对应的绘制组件
 // labelOf 获取标签绘制需要的刻度
@@ -41,26 +41,40 @@ export function createAxis(components, labelOf) {
     // 转换成 00、01、11、10
     const type = `${+coordinate.isPolar()}${+coordinate.isTranspose()}`;
     const options = {
-      tickLength, fontSize, center, isOrdinal,
+      tickLength,
+      fontSize,
+      center,
+      isOrdinal,
     };
 
     // 根据当前坐标系种类选择对应的绘制格子、刻度和标签的方法
     const {
-      grid: Grid, ticks: Ticks, label: Label, start, end,
+      grid: Grid,
+      ticks: Ticks,
+      label: Label,
+      start,
+      end,
     } = components[type];
 
     // 计算得到刻度真正的坐标和展示的文本
     const ticks = values.map((d) => {
       const [x, y] = coordinate(start(d, scale, offset));
       const text = formatter(d);
-      return { x, y, text };
+      return {
+        x,
+        y,
+        text
+      };
     });
 
     const labelTick = (() => {
       if (!isOrdinal) return lastOf(ticks);
       const value = lastOf(values);
       const [x, y] = coordinate(start(value, scale, offset * 2));
-      return { x, y };
+      return {
+        x,
+        y
+      };
     })();
 
     // 按需绘制格子、刻度和标签
