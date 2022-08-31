@@ -2,7 +2,13 @@ import { createRenderer } from '../renderer/renderer';
 import { bfs } from '../view/utils';
 import { createViews } from '../view/view';
 import { identity } from '../coordinate/utils';
-import { assignDefined } from './utils';
+import { assignDefined, map } from './utils';
+import { initialize } from './geometry';
+import { inferEncodings } from './encoding';
+import { inferGuides } from './guide';
+import { create } from './create';
+import { createCoordinate } from '../coordinate';
+import { applyScales } from './scale';
 
 export function plot(root) {
   // 创建渲染引擎
@@ -49,12 +55,49 @@ export function plot(root) {
 }
 
 function plotView({
-  renderer, scales: scalesOptions, guides: guidesOptions, geometries: geometriesOptions, width, height, x, y,
-  paddingLeft = 45, paddingRight = 45, paddingBottom = 45, paddingTop = 60,
+  renderer,
+  scales: scalesOptions,
+  guides: guidesOptions,
+  coordinates: coordinateOptions,
+  geometries: geometriesOptions,
+  width, height, x, y,
+  paddingLeft = 45, paddingRight = 45, paddingBottom = 45, paddingTop = 65,
 }) {
   // 获得每个通道的值
   const geometries = geometriesOptions.map(initialize);
   const channels = geometries.map((d) => d.channels);
+
+  // 推断scales和guides
+  const scaleDescriptors = inferScales(channels, scalesOptions);
+  const guidesDescriptors = inferGuides(scaleDescriptors, { x, y, paddingLeft }, guidesOptions);
+
+  // 生成scales和guides
+  const scales = map(scaleDescriptors, create);
+  const guides = map(guidesDescriptors, create);
+
+  // 生成坐标系
+  const transforms = inferCoordinates(coordinateOptions).map(create);
+  const coordinate = createCoordinate({
+    x: x + paddingLeft,
+    y: y + paddingTop,
+    width: width - paddingLeft - paddingRight,
+    height: height - paddingTop - paddingBottom,
+    transforms,
+  });
+
+  // 绘制辅助组件
+  for (const [key, guide] of Object.entries(guides)) {
+    const scale = scales(key);
+    guide(renderer, scale, coordinate);
+  }
+
+  // 绘制几何元素
+  for (const {
+    index, geometry, channels, styles,
+  } of geometries) {
+    const values = applyScales(channels, scales);
+    geometry(renderer, index, scales, values, styles, coordinate);
+  }
 }
 
 function flow(root) {
@@ -84,4 +127,8 @@ function isChartNode(type) {
     default:
       return true;
   }
+}
+
+function inferCoordinates(coordinates) {
+  return [...coordinates, { type: 'cartesian' }];
 }
